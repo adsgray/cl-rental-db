@@ -7,6 +7,7 @@ import re
 from bs4 import BeautifulSoup
 import sqlite3 as lite
 from sqlite3 import IntegrityError
+import locguess
 
 config = ConfigParser.ConfigParser()
 config.read("config.ini")
@@ -24,8 +25,9 @@ def add_ad_to_db(ad):
     """
     Add this ad to the db
     """
-    add = ('INSERT INTO ad (time, title, loctext, bedrooms, squarefeet, price) values(?,?,?,?,?,?)')
-    data = (ad['time'], ad['title'], ad['loctext'], ad['bedrooms'], ad['squarefeet'], ad['price'])
+    loc1 = locguess.guessLocation(ad['title'], ad['loctext'])
+    add = ('INSERT INTO ad (time, title, loctext, bedrooms, squarefeet, price, loc1) values(?,?,?,?,?,?,?)')
+    data = (ad['time'], ad['title'], ad['loctext'], ad['bedrooms'], ad['squarefeet'], ad['price'], loc1)
     try:
         cur.execute(add, data)
     except IntegrityError:

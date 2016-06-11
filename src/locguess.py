@@ -21,7 +21,7 @@ def guessFromStringWithMapping(string, mapping):
     for m in mapping:
         if re.search(m['r'], string, re.IGNORECASE):
             return m['l']
-    return ""
+    return None
 
 def guessLocation(title, location):
     # use map of regex->location_string to guess?
