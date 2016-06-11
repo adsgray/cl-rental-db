@@ -1,12 +1,15 @@
 #!/usr/bin/python
 
+import ConfigParser
 import sys
 import codecs
 import re
 import sqlite3 as lite
 from sqlite3 import IntegrityError
 
-dbpath = '/home/ec2-user/code/craigslist-search/db/cl.db'
+config = ConfigParser.ConfigParser()
+config.read("config.ini")
+dbpath = config.get("main", "dbpath")
 
 # wheee global db variables (traditional)
 con = lite.connect(dbpath)
