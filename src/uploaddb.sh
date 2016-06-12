@@ -10,4 +10,4 @@ PREFIX="/home/ec2-user/code/craigslist-search/db"
 FOLDER="cl-rental-db"
 DBFILE="/home/ec2-user/code/craigslist-search/db/cl.db"
 
-s3put --prefix $PREFIX --key_prefix $FOLDER --bucket $S3_BUCKET $DBFILE
+s3put --prefix $PREFIX --key_prefix $FOLDER --bucket $S3_BUCKET --grant public-read $DBFILE
