@@ -8,3 +8,6 @@
 * https://s3-us-west-1.amazonaws.com/adsgb02usw/cl-rental-db/cl.db
 * or http://tinyurl.com/clvanrent
 * or http://bit.ly/1Uu2EHo
+
+## The google sheet (read-only)
+* http://tinyurl.com/clvansheet
