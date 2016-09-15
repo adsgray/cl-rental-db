@@ -9,5 +9,5 @@
 * or http://tinyurl.com/clvanrent
 * or http://bit.ly/1Uu2EHo
 
-## The google sheet (read-only)
+## The google sheet (read-only, updated weekly)
 * http://tinyurl.com/clvansheet
