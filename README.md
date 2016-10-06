@@ -2,6 +2,7 @@
 
 ## To install
 * sudo pip install beautifulsoup4
+* sudo pip install --upgrade gdata
 
 ## The sqlite3 file
 * updated daily and uploaded to S3
@@ -10,4 +11,4 @@
 * or http://bit.ly/1Uu2EHo
 
 ## The google sheet (read-only, updated weekly)
-* http://tinyurl.com/clvansheet
+* 2016 (since June): http://tinyurl.com/clvansheet2016
