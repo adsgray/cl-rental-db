@@ -54,7 +54,7 @@ def getTime(item):
     return t[0]['datetime']
 
 def getTitle(item):
-    title = item.find('span', {"id": 'titletextonly'})
+    title = item.find('a', class_="hdrlnk")
     return title.contents[0].encode("utf-8")
 
 # return number of bedrooms and square footage, if present
@@ -75,15 +75,15 @@ def getHousing(item):
             squarefeet = m.group(1)
         else:
             squarefeet = 0
-        
+
         return {"bedrooms": bedrooms, "squarefeet": squarefeet}
 
     except AttributeError:
         # will have to figure out from title?
         return {"bedrooms": 0, "squarefeet": 0}
-        
+
 def getPrice(item):
-    p = item.find_all('span', class_='price')
+    p = item.find_all('span', class_='result-price')
     try:
         raw = p[0].contents[0]
         m = re.search("\$(\d+)", raw)
@@ -95,18 +95,21 @@ def getPrice(item):
         return -1
 
 def getLocation(item):
-    loc = item.find_all('span', class_='pnr')
-    raw = loc[0].contents[1].contents[0]
-    m = re.search("\((.+)\)", raw)
-    if m:
-        return m.group(1).encode("utf-8")
+    loc = item.find_all('span', class_='result-hood')
+    if loc:
+        raw = loc[0].contents[0] #.contents[0]
+        m = re.search("\((.+)\)", raw)
+        if m:
+            return m.group(1).encode("utf-8")
+        else:
+            return ""
     else:
         return ""
 
 
 # https://www.sqlite.org/lang_datefunc.html
 
-for item in soup.find_all('p', class_="row"):
+for item in soup.find_all('p', class_="result-info"):
     #data = (ad['time'], ad['title'], ad['loctext'], ad['bedrooms'], ad['squarefeet'], ad['price'])
     housing = getHousing(item)
     ad = {'time': getTime(item), 'title': getTitle(item), 'loctext': getLocation(item), 'bedrooms': housing['bedrooms'], 'squarefeet': housing['squarefeet'], 'price': getPrice(item) }
