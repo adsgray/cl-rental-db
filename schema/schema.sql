@@ -9,6 +9,7 @@ create table ad(
 	price INTEGER,
 	location_id INTEGER,
 	loc1 TEXT,
+	furnished INTEGER,
 	FOREIGN KEY(location_id) REFERENCES location(id)
 	UNIQUE (bedrooms, squarefeet, loctext, price)
 );
@@ -17,4 +18,3 @@ create table location(
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name TEXT
 );
-

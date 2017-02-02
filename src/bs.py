@@ -26,8 +26,8 @@ def add_ad_to_db(ad):
     Add this ad to the db
     """
     loc1 = locguess.guessLocation(ad['title'], ad['loctext'])
-    add = ('INSERT INTO ad (time, title, loctext, bedrooms, squarefeet, price, loc1) values(?,?,?,?,?,?,?)')
-    data = (ad['time'], ad['title'], ad['loctext'], ad['bedrooms'], ad['squarefeet'], ad['price'], loc1)
+    add = ('INSERT INTO ad (time, title, loctext, bedrooms, squarefeet, price, loc1, furnished) values(?,?,?,?,?,?,?,?)')
+    data = (ad['time'], ad['title'], ad['loctext'], ad['bedrooms'], ad['squarefeet'], ad['price'], loc1, ad['furnished'])
     try:
         cur.execute(add, data)
     except IntegrityError:
@@ -95,6 +95,7 @@ def getPrice(item):
         return -1
 
 def getLocation(item):
+    #loc = item.find_all('span', class_='pnr')
     loc = item.find_all('span', class_='result-hood')
     if loc:
         raw = loc[0].contents[0] #.contents[0]
@@ -106,13 +107,26 @@ def getLocation(item):
     else:
         return ""
 
+# returns 1 if title contains "Furnished" 0 otherwise
+def getFurnished(title):
+    r = re.compile("furnished", re.IGNORECASE)
+    if re.search(r, title):
+        return 1
+    else:
+        return 0
+
 
 # https://www.sqlite.org/lang_datefunc.html
 
 for item in soup.find_all('p', class_="result-info"):
+    #print item
     #data = (ad['time'], ad['title'], ad['loctext'], ad['bedrooms'], ad['squarefeet'], ad['price'])
     housing = getHousing(item)
-    ad = {'time': getTime(item), 'title': getTitle(item), 'loctext': getLocation(item), 'bedrooms': housing['bedrooms'], 'squarefeet': housing['squarefeet'], 'price': getPrice(item) }
+    title = getTitle(item)
+    furnished = getFurnished(title)
+    ad = {'time': getTime(item), 'title': getTitle(item), 'loctext': getLocation(item),
+          'bedrooms': housing['bedrooms'], 'squarefeet': housing['squarefeet'],
+          'price': getPrice(item), 'furnished': furnished }
     add_ad_to_db(ad)
 
 con.commit()
