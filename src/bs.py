@@ -4,6 +4,8 @@ import ConfigParser
 import sys
 import codecs
 import re
+import requests
+import json
 from bs4 import BeautifulSoup
 import sqlite3 as lite
 from sqlite3 import IntegrityError
@@ -12,6 +14,7 @@ import locguess
 config = ConfigParser.ConfigParser()
 config.read("config.ini")
 dbpath = config.get("main", "dbpath")
+slacktoken = config.get("main", "slacktoken")
 
 soup = BeautifulSoup(codecs.open(sys.argv[1], "r", "utf-8"), "lxml")
 
@@ -30,9 +33,11 @@ def add_ad_to_db(ad):
     data = (ad['time'], ad['title'], ad['loctext'], ad['bedrooms'], ad['squarefeet'], ad['price'], loc1, ad['furnished'])
     try:
         cur.execute(add, data)
+        return "added";
     except IntegrityError:
         print("constraint fail")
         print(ad)
+        return "duplicate";
 
 
 def guessLocation(title, location):
@@ -116,18 +121,36 @@ def getFurnished(title):
         return 0
 
 
-# https://www.sqlite.org/lang_datefunc.html
+def send_stats_to_slack(results):
+    """
+    Send stats to slack channel.
+    """
+    slackurl="https://hooks.slack.com/services/" + slacktoken
+    payload = {'text': "added {0}, {1} duplicates.".format(results["added"], results["duplicate"])}
+    headers = {'content-type': 'application/json'}
+    requests.post(slackurl, data=json.dumps(payload))
+    return 1
 
+results = { "added" : 0, "duplicate" : 0}
+
+# https://www.sqlite.org/lang_datefunc.html
 for item in soup.find_all('p', class_="result-info"):
     #print item
     #data = (ad['time'], ad['title'], ad['loctext'], ad['bedrooms'], ad['squarefeet'], ad['price'])
     housing = getHousing(item)
     title = getTitle(item)
     furnished = getFurnished(title)
+
+
     ad = {'time': getTime(item), 'title': getTitle(item), 'loctext': getLocation(item),
           'bedrooms': housing['bedrooms'], 'squarefeet': housing['squarefeet'],
           'price': getPrice(item), 'furnished': furnished }
-    add_ad_to_db(ad)
+
+    result = add_ad_to_db(ad) # either "added" or "duplicate"
+    results[result] += 1
+
+
+send_stats_to_slack(results)
 
 con.commit()
 con.close()
