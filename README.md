@@ -2,6 +2,7 @@
 
 ## To install
 * sudo pip install beautifulsoup4
+* subo pip install lxml
 * sudo pip install --upgrade gdata
 
 ## The sqlite3 file
