@@ -11,5 +11,7 @@
 * or http://tinyurl.com/clvanrent
 * or http://bit.ly/1Uu2EHo
 
-## The google sheet (read-only, updated weekly)
+## The google sheet (read-only, updated monthly)
 * 2016 (since June): http://tinyurl.com/clvansheet2016
+* 2017: https://docs.google.com/spreadsheets/d/1R6EZrGHxJTh4frZ_i61rkgfSzq1lXfoxh5_HefQXfHI/edit?usp=sharing
+* 2018: https://docs.google.com/spreadsheets/d/1DirkJjAkpdcvJqI8csix_aKZYis_JgR60o9xEVx9v1w/edit?usp=sharing
