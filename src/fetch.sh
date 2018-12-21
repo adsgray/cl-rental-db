@@ -2,7 +2,7 @@
 
 export PATH=$PATH:/usr/bin:/bin
 
-url="http://vancouver.craigslist.ca/search/apa"
+url="https://vancouver.craigslist.org/d/apts-housing-for-rent/search/apa"
 today=`date "+%Y-%m-%d"`
 
 mkdir -p $today
