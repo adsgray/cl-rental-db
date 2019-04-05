@@ -12,6 +12,8 @@ do_median() {
 
 sqlite3 --separator $'\t' ~/Downloads/cl.db "select bedrooms, price, loc1, time from ad where bedrooms in $bedrooms and price > $guardmin and price < $guardmax and loc1 in $vancouverloc and furnished=$furnished and $date order by price;" > $file
 
+count=`wc -l $file|awk '{print $1}'`
+echo -n "$count,"
 tail -n +$(((`cat $file | wc -l` / 2) + 1)) $file | head -n 1|awk '{print $2}'
 #wc -l $file
 }
