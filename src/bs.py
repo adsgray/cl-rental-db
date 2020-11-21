@@ -91,9 +91,11 @@ def getPrice(item):
     p = item.find_all('span', class_='result-price')
     try:
         raw = p[0].contents[0]
-        m = re.search("\$(\d+)", raw)
+        clean = re.sub('[$,]', '', raw)
+        m = re.search("(\d+)", clean)
         if m:
-            return m.group(1)
+            ret = m.group(1) 
+            return ret
         else:
             return 0
     except IndexError:
@@ -114,7 +116,7 @@ def getLocation(item):
 
 # returns 1 if title contains "Furnished" 0 otherwise
 def getFurnished(title):
-    r = re.compile("furnished", re.IGNORECASE)
+    r = re.compile("\bfurnished", re.IGNORECASE)
     if re.search(r, title):
         return 1
     else:
@@ -134,8 +136,7 @@ def send_stats_to_slack(results):
 results = { "added" : 0, "duplicate" : 0}
 
 # https://www.sqlite.org/lang_datefunc.html
-for item in soup.find_all('p', class_="result-info"):
-    #print item
+for item in soup.find_all('div', class_="result-info"):
     #data = (ad['time'], ad['title'], ad['loctext'], ad['bedrooms'], ad['squarefeet'], ad['price'])
     housing = getHousing(item)
     title = getTitle(item)
